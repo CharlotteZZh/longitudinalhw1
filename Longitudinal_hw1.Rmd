@@ -1,0 +1,384 @@
+---
+title: "Longitudinal Data: Homework 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE,
+                      fig.width = 7, fig.height = 4, cache = FALSE)
+library(ggplot2)
+theme_set(theme_bw())
+load("Six Cities.RData")
+load("MACS.RData")
+```
+
+I used the Six Cities data for Question 2 and the MACS data for Question 3.
+
+# Question 1: Variance and study design
+
+## (a) Derivation for each estimator
+
+Assume different participants are independent, each measurement has variance $\sigma^2$, and two measurements on the same participant have covariance $\rho\sigma^2$. Let $K$ denote the **total** number of participants in a design. For parallel groups, $n_A=n_B=K/2$. I use baseline and follow-up to label the two visits in part (ii).
+
+**(i) Cross-sectional design.** The two treatment groups are independent, so
+
+$$
+\operatorname{Var}(\widehat\gamma_a)
+=\operatorname{Var}(\bar Y^A)+\operatorname{Var}(\bar Y^B)
+=\frac{\sigma^2}{K/2}+\frac{\sigma^2}{K/2}
+=\boxed{\frac{4\sigma^2}{K}}.
+$$
+
+**(ii) Comparison of changes from baseline.** For each participant define $D_k=Y_{k,\mathrm{follow\text{-}up}}-Y_{k,\mathrm{baseline}}$. Then
+
+$$
+\operatorname{Var}(D_k)=\sigma^2+\sigma^2-2\rho\sigma^2
+=2\sigma^2(1-\rho).
+$$
+
+Since the estimator is $\bar D_A-\bar D_B$,
+
+$$
+\operatorname{Var}(\widehat\gamma_b)
+=\frac{2\sigma^2(1-\rho)}{K/2}
+ +\frac{2\sigma^2(1-\rho)}{K/2}
+=\boxed{\frac{8\sigma^2(1-\rho)}{K}}.
+$$
+
+**(iii) Crossover design.** Every participant receives both treatments. With $D_k=Y^A_{k1}-Y^B_{k2}$, the estimator is $K^{-1}\sum_k D_k$. Thus
+
+$$
+\operatorname{Var}(\widehat\gamma_c)
+=\frac{1}{K^2}\sum_{k=1}^K 2\sigma^2(1-\rho)
+=\boxed{\frac{2\sigma^2(1-\rho)}{K}}.
+$$
+
+**(iv) Comparison of participant averages.** For each participant, $M_k=(Y_{k1}+Y_{k2})/2$, giving
+
+$$
+\operatorname{Var}(M_k)
+=\tfrac14\{\sigma^2+\sigma^2+2\rho\sigma^2\}
+=\frac{\sigma^2(1+\rho)}{2}.
+$$
+
+The difference between the two independent group means of $M_k$ has variance
+
+$$
+\operatorname{Var}(\widehat\gamma_d)
+=2\frac{\sigma^2(1+\rho)/2}{K/2}
+=\boxed{\frac{2\sigma^2(1+\rho)}{K}}.
+$$
+
+Positive within-person correlation reduces the variance of a **difference**, but increases the variance of an **average** relative to averaging independent measurements.
+
+## (b) Measurement cost of $500; no enrollment cost
+
+There are $300{,}000/500=600$ available measurements. The cross-sectional design enrolls **600 people (300 per treatment)**. Each longitudinal design enrolls **300 people**: 150 per treatment in designs (ii) and (iv), or all 300 receiving both treatments in design (iii).
+
+The table reports $\operatorname{Var}(\widehat\gamma)/\sigma^2$; multiply each entry by $\sigma^2$ for the variance itself.
+
+```{r q1-budget-b}
+variance_table <- function(K_cross, K_long) {
+  rho <- c(.2, .5, .8)
+  data.frame(
+    rho = rho,
+    `Cross-sectional` = rep(4 / K_cross, 3),
+    `Change from baseline` = 8 * (1 - rho) / K_long,
+    Crossover = 2 * (1 - rho) / K_long,
+    `Average of two` = 2 * (1 + rho) / K_long,
+    check.names = FALSE
+  )
+}
+var_b <- variance_table(600, 300)
+knitr::kable(var_b, digits = 6,
+             caption = "(b) Variance as a multiple of sigma-squared.")
+```
+
+At $\rho=0.2$, **crossover** minimizes variance (0.005333$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.5$, **crossover** again wins (0.003333$\sigma^2$); cross-sectional is next, then averages, then changes. At $\rho=0.8$, **crossover** wins (0.001333$\sigma^2$), followed by changes, cross-sectional, and averages. Under this budget, change scores improve on the cross-sectional design only when $\rho>0.75$.
+
+## (c) Enrollment cost of $250 plus $250 per measurement
+
+A cross-sectional participant costs $250+250=500$, so **600 people (300 per treatment)** can be enrolled. A longitudinal participant costs $250+2(250)=750$, so **400 people** can be enrolled: 200 per treatment in designs (ii) and (iv), or all 400 receiving both treatments in design (iii).
+
+```{r q1-budget-c}
+var_c <- variance_table(600, 400)
+knitr::kable(var_c, digits = 6,
+             caption = "(c) Variance as a multiple of sigma-squared.")
+stopifnot(600 * 500 == 300000, 300 * 2 * 500 == 300000,
+          400 * (250 + 2 * 250) == 300000,
+          all(var_b$Crossover < var_b$`Cross-sectional`),
+          all(var_c$Crossover < var_c$`Cross-sectional`))
+```
+
+At $\rho=0.2$, **crossover** minimizes variance (0.004000$\sigma^2$), followed by averages, cross-sectional, and changes. At $\rho=0.5$, **crossover** wins (0.002500$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.8$, **crossover** wins (0.001000$\sigma^2$), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when $\rho>2/3$; averages improve on it when $\rho<1/3$.
+
+I would choose the crossover design for all three correlations under either budget because it has the smallest variance. This assumes no carryover or period effects. Otherwise, receiving A first and B second could mix up the treatment effect with a time effect.
+
+If crossover is not possible, I would choose cross-sectional sampling at $\rho=0.2,0.5$ and changes at $\rho=0.8$ in (b). In (c), I would choose averages at $\rho=0.2$, cross-sectional sampling at $\rho=0.5$, and changes at $\rho=0.8$.
+
+# Question 2
+
+## (a) Exploratory data analysis
+
+First, I checked the number of girls, the number of visits, and missing values.
+
+```{r topeka-summary}
+topeka <- topeka[order(topeka$id, topeka$age), ]
+topeka$FEV1 <- exp(topeka$log.FEV1)
+visits <- table(topeka$id)
+
+c(girls = length(visits), observations = nrow(topeka),
+  one_visit = sum(visits == 1), missing_values = sum(is.na(topeka)),
+  duplicate_visits = sum(duplicated(topeka[c("id", "age")])))
+
+# A short summary table
+variables <- topeka[c("age", "height", "FEV1", "log.FEV1")]
+descriptive <- data.frame(
+  Mean = sapply(variables, mean),
+  SD = sapply(variables, sd),
+  Minimum = sapply(variables, min),
+  Median = sapply(variables, median),
+  Maximum = sapply(variables, max))
+knitr::kable(descriptive, digits = 2)
+summary(as.numeric(visits))
+```
+
+There are **300 girls and 1,994 observations**. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. However, having no missing entries does not mean that every girl attended every planned visit. Since girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.
+
+**Mean structure**
+
+```{r topeka-mean, fig.cap="FEV1 by age and height, with smooth curves."}
+par(mfrow = c(1, 2), mar = c(4, 4, 1, 1))
+plot(topeka$age, topeka$FEV1, pch = 16, cex = .4,
+     col = "gray65", xlab = "Age (years)", ylab = "FEV1 (L)")
+lines(lowess(topeka$age, topeka$FEV1), col = "blue", lwd = 2)
+plot(topeka$height, topeka$FEV1, pch = 16, cex = .4,
+     col = "gray65", xlab = "Height (m)", ylab = "FEV1 (L)")
+lines(lowess(topeka$height, topeka$FEV1), col = "blue", lwd = 2)
+par(mfrow = c(1, 1))
+```
+
+FEV1 generally increases with age and height. The age curve starts to level off in the later teenage years, so a straight line may not describe the whole age range well. I would consider a curved age effect and include height when modeling lung function. Since age and height are related, their effects should be interpreted together.
+
+```{r topeka-trajectories, fig.cap="Log FEV1 over time for 20 randomly selected girls."}
+set.seed(8157)
+selected_ids <- sample(unique(topeka$id), 20)
+plot_data <- subset(topeka, id %in% selected_ids)
+ggplot(plot_data, aes(age, log.FEV1, group = id)) +
+  geom_line(alpha = .5) + geom_point(size = .7) +
+  labs(x = "Age (years)", y = "Log FEV1")
+```
+
+Most girls show increasing lung function, but their starting levels and patterns of growth differ. Some also have decreases between visits. This suggests allowing girls to have different starting levels and possibly different growth rates.
+
+**Outliers**
+
+I used a simple curved mean model to look for observations that are unusual for a girl's age and height. This model is just an EDA tool.
+
+```{r topeka-outliers}
+mean_model <- lm(log.FEV1 ~ age + I(age^2) + height, data = topeka)
+topeka$residual <- residuals(mean_model)
+topeka$std_residual <- rstandard(mean_model)
+
+# Show the five largest residuals in absolute value.
+unusual <- order(abs(topeka$std_residual), decreasing = TRUE)[1:5]
+knitr::kable(topeka[unusual,
+  c("id", "age", "height", "FEV1", "std_residual")],
+  digits = 3, row.names = FALSE)
+```
+
+Girl 197 has a particularly low FEV1 of about 0.50 L at age 9.14. I would check this measurement against the original record before deciding whether it is an error. I would not remove an observation only because it is unusual. Also, a negative log FEV1 is possible when FEV1 is below 1 L.
+
+**Dependence structure**
+
+To look at dependence, I compared residuals from consecutive observed visits within each girl. Removing the age and height trend first helps avoid mistaking average growth for correlation.
+
+```{r topeka-dependence}
+previous <- c()
+current <- c()
+time_gap <- c()
+
+for (girl in unique(topeka$id)) {
+  d <- subset(topeka, id == girl)
+  n <- nrow(d)
+  if (n >= 2) {
+    previous <- c(previous, d$residual[1:(n - 1)])
+    current <- c(current, d$residual[2:n])
+    time_gap <- c(time_gap, diff(d$age))
+  }
+}
+
+# Restrict to approximately annual pairs for a comparable time gap.
+annual <- time_gap >= .5 & time_gap <= 1.5
+annual_cor <- cor(previous[annual], current[annual])
+data.frame(Pairs = sum(annual), Residual_correlation = round(annual_cor, 3))
+
+plot(previous[annual], current[annual], pch = 16, cex = .5,
+     col = "gray60", xlab = "Residual at earlier visit",
+     ylab = "Residual at next visit")
+abline(lm(current[annual] ~ previous[annual]), col = "blue", lwd = 2)
+```
+
+The residual correlation for visits about one year apart is **`r round(annual_cor, 2)`**. This shows that measurements from the same girl are positively related even after adjusting for age and height. I would account for within-girl correlation, for example with a random-intercept model, rather than treating all visits as independent. This is a descriptive correlation; the pairs themselves are not independent, and it does not tell us the correlation at every time gap.
+
+## (b) Questions we could study
+
+1. How does lung function change as girls get older, and when does growth slow down?
+2. Do girls differ in their starting lung function and rates of growth?
+3. Is an increase in a girl's height associated with an increase in her lung function?
+4. Does a girl's earlier lung function help predict her later lung function?
+
+This dataset only includes girls from Topeka and does not include pollution measurements. Therefore, it cannot directly answer questions about differences between cities, boys and girls, or pollution effects.
+
+## (c) What if there were only baseline measurements?
+
+With one measurement per girl, we could compare FEV1 between girls of different ages or heights. However, an age difference between two girls is not necessarily the same as a change within one girl. Interpreting the cross-sectional age pattern as growth would require assuming that girls of different ages are otherwise comparable, including their birth cohorts and selection into the study. Baseline ages also cover less of adolescence than all follow-up visits.
+
+We could describe differences in lung function levels, but we could not estimate individual growth rates or their variation. We could study the association between height and FEV1 across girls, but not the association between changes in height and FEV1 within a girl. Finally, without later measurements, we could not estimate within-girl correlation or check how well baseline lung function predicts future lung function.
+
+# Question 3
+
+## (a) Baseline Table 1
+
+I kept participants with a measurement within six months before seroconversion and at least one measurement afterward. For baseline, I used the last pre-seroconversion visit and treated its time as zero. Follow-up visits keep their recorded time since seroconversion.
+
+```{r macs-baseline}
+macs <- macs[order(macs$id, macs$time), ]
+baseline <- data.frame()
+followup <- data.frame()
+
+for (person in unique(macs$id)) {
+  d <- subset(macs, id == person)
+  before <- subset(d, time >= -.5 & time < 0)
+  after <- subset(d, time > 0)
+
+  if (nrow(before) > 0 && nrow(after) > 0) {
+    b <- before[which.max(before$time), ]
+    baseline <- rbind(baseline, b)
+    b$time <- 0
+    followup <- rbind(followup, b, after)
+  }
+}
+nrow(baseline)
+
+# Continuous baseline variables
+x <- baseline[c("age", "partners", "cesd", "cd4")]
+table1 <- data.frame(
+  Mean = sapply(x, mean),
+  SD = sapply(x, sd),
+  Median = sapply(x, median),
+  Q1 = sapply(x, quantile, probs = .25),
+  Q3 = sapply(x, quantile, probs = .75))
+knitr::kable(table1, digits = 1,
+             caption = "Table 1. Baseline characteristics (N = 266).")
+
+# Categorical baseline variables
+packs_table <- as.data.frame(table(baseline$packs))
+names(packs_table) <- c("Packs code", "N")
+packs_table$Percent <- 100 * packs_table$N / nrow(baseline)
+knitr::kable(packs_table, digits = 1)
+
+drug_table <- as.data.frame(table(baseline$drug))
+names(drug_table) <- c("Drug code", "N")
+drug_table$Percent <- 100 * drug_table$N / nrow(baseline)
+knitr::kable(drug_table, digits = 1)
+```
+
+The final sample contains **266 participants**, with no missing baseline covariates. The mean baseline CD4 count is **`r round(mean(baseline$cd4), 1)` cells/mm$^3$**.
+
+I kept the variable coding from the data. Age includes negative values, so I report it on the supplied scale rather than assuming it is actual age in years. I treat `packs` as categories, with code 0 as the reference, and `drug` as binary. I use `partners` and `cesd` as numeric variables. Without the class codebook, I cannot give exact labels for the smoking categories or confirm whether the partners score is capped.
+
+## (b) Two-stage analysis
+
+**Stage 1**
+
+For each participant, I fit the model
+
+$$
+\text{CD4}_{ki}=a_k+b_k\text{time}_{ki}+e_{ki}.
+$$
+
+The intercept estimates the CD4 level at time zero, and the slope estimates the change per year. I chose a linear model because it is easy to interpret and some participants only have two measurements.
+
+```{r stage-one}
+individual_results <- data.frame()
+
+for (person in unique(followup$id)) {
+  d <- subset(followup, id == person)
+  fit <- lm(cd4 ~ time, data = d)
+  individual_results <- rbind(individual_results, data.frame(
+    id = person,
+    intercept = unname(coef(fit)[1]),
+    slope = unname(coef(fit)[2]),
+    visits = nrow(d),
+    last_time = max(d$time)))
+}
+
+knitr::kable(data.frame(
+  Quantity = c("Intercept", "Annual change"),
+  Mean = c(mean(individual_results$intercept), mean(individual_results$slope)),
+  SD = c(sd(individual_results$intercept), sd(individual_results$slope)),
+  Median = c(median(individual_results$intercept), median(individual_results$slope))),
+  digits = 1)
+```
+
+The mean slope is **`r round(mean(individual_results$slope), 1)` cells/mm$^3$ per year**, and the median is **`r round(median(individual_results$slope), 1)`**. Both suggest decreasing CD4 counts. The mean is more negative because some participants have very steep estimated declines.
+
+```{r cd4-plot, fig.cap="CD4 trajectories for 20 randomly selected participants."}
+set.seed(8157)
+selected_ids <- sample(unique(followup$id), 20)
+ggplot(subset(followup, id %in% selected_ids),
+       aes(time, cd4, group = id)) +
+  geom_line(alpha = .5) + geom_point(size = .7) +
+  labs(x = "Years since seroconversion", y = "CD4 count (cells/mm^3)")
+```
+
+**Stage 2**
+
+Next, I used baseline age, smoking category, drug code, partners, and CES-D to predict the estimated intercepts and slopes. Each participant contributes one row to these regressions. I did not include baseline CD4 as a predictor because it was already used to estimate the intercept and slope.
+
+```{r stage-two}
+results <- merge(baseline, individual_results, by = "id")
+results$packs <- factor(results$packs)
+results$drug <- factor(results$drug)
+
+intercept_model <- lm(intercept ~ age + packs + drug + partners + cesd,
+                      data = results)
+slope_model <- lm(slope ~ age + packs + drug + partners + cesd,
+                  data = results)
+
+# Ordinary least squares estimates and confidence intervals
+intercept_table <- cbind(summary(intercept_model)$coefficients,
+                         confint(intercept_model))
+slope_table <- cbind(summary(slope_model)$coefficients,
+                     confint(slope_model))
+knitr::kable(intercept_table, digits = 3,
+             caption = "Baseline predictors of the fitted CD4 intercept.")
+knitr::kable(slope_table, digits = 3,
+             caption = "Baseline predictors of the fitted annual CD4 change.")
+```
+
+In the intercept model, smoking codes 3 and 4 and drug code 1 are associated with higher fitted CD4 levels than their reference groups, holding the other variables fixed ($p<0.05$). For example, the estimate for smoking code 3 is about **`r round(coef(intercept_model)['packs3'], 1)` cells/mm$^3$ higher** than code 0. Age, partners, CES-D, and the other smoking categories do not have clear associations at the 0.05 level in this model.
+
+In the slope model, none of the individual baseline covariates has a $p$-value below 0.05 using the usual least squares standard errors. The model explains only **`r round(100 * summary(slope_model)$r.squared, 1)`%** of the variation in slopes. Thus, these baseline variables do not explain much of the difference in estimated decline between participants. This does not prove that there are no associations.
+
+**A limitation of this analysis**
+
+The usual regression confidence intervals assume independent participants and equal error variance in stage 2. However, slopes based on short follow-up or few visits can be much less precise. There are **`r sum(results$visits == 2)` participants with only two measurements**, so I would treat these intervals and $p$-values as approximate.
+
+```{r short-followup-check}
+# Check how much short follow-up affects the average slope.
+longer_followup <- subset(results, visits >= 3 & last_time >= 1)
+knitr::kable(data.frame(
+  Sample = c("All participants", "At least 3 visits and 1 year of follow-up"),
+  N = c(nrow(results), nrow(longer_followup)),
+  Mean_slope = c(mean(results$slope), mean(longer_followup$slope)),
+  Median_slope = c(median(results$slope), median(longer_followup$slope))),
+  digits = 1)
+```
+
+The average decline is smaller when restricted to participants with more follow-up, although the median still shows a decline. This suggests that the size of the mean slope is affected by short follow-up. I kept all 266 participants in the main analysis because excluding people also changes the sample.
+
+**Summary for a collaborator**
+
+CD4 counts generally decreased after seroconversion. About **`r round(100 * mean(results$slope < 0), 1)`%** of participants had a downward fitted trend, and the median decline was about **`r round(-median(results$slope))` cells/mm$^3$ per year**. Some baseline characteristics were related to CD4 levels near seroconversion, but they explained little of the variation in the rate of decline. The exact average rate should be interpreted carefully because participants with short follow-up had some extreme estimates. These are associations, not evidence that a baseline characteristic causes CD4 changes.
