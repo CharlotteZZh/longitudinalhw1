@@ -1,79 +1,212 @@
 ---
 title: "Longitudinal Data: Homework 1"
-output: html_document
+output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE,
-                      fig.width = 7, fig.height = 4, cache = FALSE)
-library(ggplot2)
-theme_set(theme_bw())
-load("Six Cities.RData")
-load("MACS.RData")
-```
+# Question 1: 
 
-I used the Six Cities data for Question 2 and the MACS data for Question 3.
+## (a)
 
-# Question 1: Variance and study design
-
-## (a) Derivation for each estimator
-
-Assume different participants are independent, each measurement has variance $\sigma^2$, and two measurements on the same participant have covariance $\rho\sigma^2$. Let $K$ denote the **total** number of participants in a design. For parallel groups, $n_A=n_B=K/2$. I use baseline and follow-up to label the two visits in part (ii).
-
-**(i) Cross-sectional design.** The two treatment groups are independent, so
+**(i)Cross-sectional design**
 
 $$
-\operatorname{Var}(\widehat\gamma_a)
-=\operatorname{Var}(\bar Y^A)+\operatorname{Var}(\bar Y^B)
-=\frac{\sigma^2}{K/2}+\frac{\sigma^2}{K/2}
-=\boxed{\frac{4\sigma^2}{K}}.
+\hat{\gamma}_a = \bar{Y}_1^A - \bar{Y}_1^B
 $$
 
-**(ii) Comparison of changes from baseline.** For each participant define $D_k=Y_{k,\mathrm{follow\text{-}up}}-Y_{k,\mathrm{baseline}}$. Then
-
+Since there are K/2 participants in each treatment group,
 $$
-\operatorname{Var}(D_k)=\sigma^2+\sigma^2-2\rho\sigma^2
-=2\sigma^2(1-\rho).
-$$
-
-Since the estimator is $\bar D_A-\bar D_B$,
-
-$$
-\operatorname{Var}(\widehat\gamma_b)
-=\frac{2\sigma^2(1-\rho)}{K/2}
- +\frac{2\sigma^2(1-\rho)}{K/2}
-=\boxed{\frac{8\sigma^2(1-\rho)}{K}}.
+\operatorname{Var}(\bar{Y}_1^A)
+= \frac{\sigma^2}{K/2}
+= \frac{2\sigma^2}{K},
 $$
 
-**(iii) Crossover design.** Every participant receives both treatments. With $D_k=Y^A_{k1}-Y^B_{k2}$, the estimator is $K^{-1}\sum_k D_k$. Thus
+and similarly,
 
 $$
-\operatorname{Var}(\widehat\gamma_c)
-=\frac{1}{K^2}\sum_{k=1}^K 2\sigma^2(1-\rho)
-=\boxed{\frac{2\sigma^2(1-\rho)}{K}}.
+\operatorname{Var}(\bar{Y}_1^B)
+= \frac{2\sigma^2}{K}.
 $$
 
-**(iv) Comparison of participant averages.** For each participant, $M_k=(Y_{k1}+Y_{k2})/2$, giving
+The two treatment groups are independent, so
 
 $$
-\operatorname{Var}(M_k)
-=\tfrac14\{\sigma^2+\sigma^2+2\rho\sigma^2\}
-=\frac{\sigma^2(1+\rho)}{2}.
+\begin{aligned}
+\operatorname{Var}(\hat{\gamma}_a)
+&= \operatorname{Var}(\bar{Y}_1^A - \bar{Y}_1^B) \\
+&= \operatorname{Var}(\bar{Y}_1^A)
++ \operatorname{Var}(\bar{Y}_1^B) \\
+&= \frac{2\sigma^2}{K} + \frac{2\sigma^2}{K} \\
+&= \boxed{\frac{4\sigma^2}{K}}.
+\end{aligned}
 $$
 
-The difference between the two independent group means of $M_k$ has variance
+
+**(ii) Longitudinal comparison of change from baselin**
+$$
+\hat{\gamma}_b
+=
+(\bar{Y}_1^A-\bar{Y}_0^A)
+-
+(\bar{Y}_1^B-\bar{Y}_0^B)
+$$
+
+For one participant, the variance of the change from baseline is
 
 $$
-\operatorname{Var}(\widehat\gamma_d)
-=2\frac{\sigma^2(1+\rho)/2}{K/2}
-=\boxed{\frac{2\sigma^2(1+\rho)}{K}}.
+\begin{aligned}
+\operatorname{Var}(Y_1-Y_0)
+&=
+\operatorname{Var}(Y_1)
++
+\operatorname{Var}(Y_0)
+-
+2\operatorname{Cov}(Y_1,Y_0)\\
+&=
+\sigma^2+\sigma^2-2\rho\sigma^2\\
+&=
+2\sigma^2(1-\rho).
+\end{aligned}
 $$
 
-Positive within-person correlation reduces the variance of a **difference**, but increases the variance of an **average** relative to averaging independent measurements.
+Each treatment group has K/2 participants, so
 
-## (b) Measurement cost of $500; no enrollment cost
+$$
+\operatorname{Var}(\bar{Y}_1^A-\bar{Y}_0^A)
+=
+\frac{2\sigma^2(1-\rho)}{K/2}
+=
+\frac{4\sigma^2(1-\rho)}{K}.
+$$
 
-There are $300{,}000/500=600$ available measurements. The cross-sectional design enrolls **600 people (300 per treatment)**. Each longitudinal design enrolls **300 people**: 150 per treatment in designs (ii) and (iv), or all 300 receiving both treatments in design (iii).
+The two treatment groups are independent, so
+
+$$
+\begin{aligned}
+\operatorname{Var}(\hat{\gamma}_b)
+&=
+\frac{4\sigma^2(1-\rho)}{K}
++
+\frac{4\sigma^2(1-\rho)}{K}\\
+&=
+\boxed{\frac{8\sigma^2(1-\rho)}{K}}.
+\end{aligned}
+$$
+
+
+**(iii) Crossover design.** 
+$$
+\hat{\gamma}_c
+=
+\bar{Y}_1^A-\bar{Y}_2^B
+$$
+
+Since the same K participants are measured under both treatments,
+
+$$
+\begin{aligned}
+\operatorname{Var}(Y_1^A-Y_2^B)
+&=
+\operatorname{Var}(Y_1^A)
++
+\operatorname{Var}(Y_2^B)
+-
+2\operatorname{Cov}(Y_1^A,Y_2^B)\\
+&=
+\sigma^2+\sigma^2-2\rho\sigma^2\\
+&=
+2\sigma^2(1-\rho).
+\end{aligned}
+$$
+
+Since there are K participants,
+
+$$
+\boxed{
+\operatorname{Var}(\hat{\gamma}_c)
+=
+\frac{2\sigma^2(1-\rho)}{K}
+}.
+$$
+
+**(iv) Longitudinal comparison of averages.** 
+$$
+\hat{\gamma}_d
+=
+\bar{Y}^A-\bar{Y}^B,
+$$
+
+where
+
+$$
+\bar{Y}^{tx}
+=
+\frac{Y_1^{tx}+Y_2^{tx}}{2}.
+$$
+
+For one participant,
+
+$$
+\begin{aligned}
+\operatorname{Var}\left(\frac{Y_1+Y_2}{2}\right)
+&=
+\frac{1}{4}
+\left[
+\operatorname{Var}(Y_1)
++
+\operatorname{Var}(Y_2)
++
+2\operatorname{Cov}(Y_1,Y_2)
+\right]\\
+&=
+\frac{1}{4}
+\left[
+\sigma^2+\sigma^2+2\rho\sigma^2
+\right]\\
+&=
+\frac{\sigma^2(1+\rho)}{2}.
+\end{aligned}
+$$
+
+Each treatment group has K/2 participants, so
+
+$$
+\operatorname{Var}(\bar{Y}^A)
+=
+\frac{\sigma^2(1+\rho)/2}{K/2}
+=
+\frac{\sigma^2(1+\rho)}{K}.
+$$
+
+Similarly,
+
+$$
+\operatorname{Var}(\bar{Y}^B)
+=
+\frac{\sigma^2(1+\rho)}{K}.
+$$
+
+Therefore,
+
+$$
+\begin{aligned}
+\operatorname{Var}(\hat{\gamma}_d)
+&=
+\operatorname{Var}(\bar{Y}^A)
++
+\operatorname{Var}(\bar{Y}^B)\\
+&=
+\frac{\sigma^2(1+\rho)}{K}
++
+\frac{\sigma^2(1+\rho)}{K}\\
+&=
+\boxed{\frac{2\sigma^2(1+\rho)}{K}}.
+\end{aligned}
+$$
+
+
+
+## (b) 
+There are 300000/500=600 available measurements. The cross-sectional design enrolls 600 people (300 per treatment). Each longitudinal design enrolls 300 people: 150 per treatment in designs (ii) and (iv), or all 300 receiving both treatments in design (iii).
 
 The table reports $\operatorname{Var}(\widehat\gamma)/\sigma^2$; multiply each entry by $\sigma^2$ for the variance itself.
 
@@ -85,40 +218,40 @@ variance_table <- function(K_cross, K_long) {
     `Cross-sectional` = rep(4 / K_cross, 3),
     `Change from baseline` = 8 * (1 - rho) / K_long,
     Crossover = 2 * (1 - rho) / K_long,
-    `Average of two` = 2 * (1 + rho) / K_long,
+    `Comparison of average` = 2 * (1 + rho) / K_long,
     check.names = FALSE
   )
 }
 var_b <- variance_table(600, 300)
-knitr::kable(var_b, digits = 6,
-             caption = "(b) Variance as a multiple of sigma-squared.")
+knitr::kable(var_b, digits = 6)
 ```
 
-At $\rho=0.2$, **crossover** minimizes variance (0.005333$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.5$, **crossover** again wins (0.003333$\sigma^2$); cross-sectional is next, then averages, then changes. At $\rho=0.8$, **crossover** wins (0.001333$\sigma^2$), followed by changes, cross-sectional, and averages. Under this budget, change scores improve on the cross-sectional design only when $\rho>0.75$.
+At $\rho=0.2$, crossover minimizes variance (0.005333$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.5$, crossover again wins (0.003333$\sigma^2$); cross-sectional is next, then averages, then changes. At $\rho=0.8$, crossover wins (0.001333$\sigma^2$), followed by changes, cross-sectional, and averages. Under this budget, change scores improve on the cross-sectional design only when $\rho>0.75$.
 
-## (c) Enrollment cost of $250 plus $250 per measurement
 
-A cross-sectional participant costs $250+250=500$, so **600 people (300 per treatment)** can be enrolled. A longitudinal participant costs $250+2(250)=750$, so **400 people** can be enrolled: 200 per treatment in designs (ii) and (iv), or all 400 receiving both treatments in design (iii).
+## (c) 
+
+A cross-sectional participant costs 250+250=500, so 600 people (300 each) can be enrolled. A longitudinal participant costs 250+2(250)=750, so 400 people can be enrolled: 200 per treatment in designs (ii) and (iv), or all 400 receiving both treatments in design (iii).
 
 ```{r q1-budget-c}
 var_c <- variance_table(600, 400)
-knitr::kable(var_c, digits = 6,
-             caption = "(c) Variance as a multiple of sigma-squared.")
+knitr::kable(var_c, digits = 6)
 stopifnot(600 * 500 == 300000, 300 * 2 * 500 == 300000,
           400 * (250 + 2 * 250) == 300000,
           all(var_b$Crossover < var_b$`Cross-sectional`),
           all(var_c$Crossover < var_c$`Cross-sectional`))
 ```
 
-At $\rho=0.2$, **crossover** minimizes variance (0.004000$\sigma^2$), followed by averages, cross-sectional, and changes. At $\rho=0.5$, **crossover** wins (0.002500$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.8$, **crossover** wins (0.001000$\sigma^2$), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when $\rho>2/3$; averages improve on it when $\rho<1/3$.
+At $\rho=0.2$, crossover minimizes variance (0.004000$\sigma^2$), followed by averages, cross-sectional, and changes. At $\rho=0.5$, crossover wins (0.002500$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.8$, crossover wins (0.001000$\sigma^2$), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when $\rho>2/3$; averages improve on it when $\rho<1/3$.
 
 I would choose the crossover design for all three correlations under either budget because it has the smallest variance. This assumes no carryover or period effects. Otherwise, receiving A first and B second could mix up the treatment effect with a time effect.
 
 If crossover is not possible, I would choose cross-sectional sampling at $\rho=0.2,0.5$ and changes at $\rho=0.8$ in (b). In (c), I would choose averages at $\rho=0.2$, cross-sectional sampling at $\rho=0.5$, and changes at $\rho=0.8$.
 
+
 # Question 2
 
-## (a) Exploratory data analysis
+## (a)
 
 First, I checked the number of girls, the number of visits, and missing values.
 
@@ -143,7 +276,7 @@ knitr::kable(descriptive, digits = 2)
 summary(as.numeric(visits))
 ```
 
-There are **300 girls and 1,994 observations**. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. However, having no missing entries does not mean that every girl attended every planned visit. Since girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.
+There are 300 girls and 1,994 observations. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. However, having no missing entries does not mean that every girl attended every planned visit. Since girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.
 
 **Mean structure**
 
@@ -284,7 +417,7 @@ drug_table$Percent <- 100 * drug_table$N / nrow(baseline)
 knitr::kable(drug_table, digits = 1)
 ```
 
-The final sample contains **266 participants**, with no missing baseline covariates. The mean baseline CD4 count is **`r round(mean(baseline$cd4), 1)` cells/mm$^3$**.
+The final sample contains 266 participants, with no missing baseline covariates. The mean baseline CD4 count is **`r round(mean(baseline$cd4), 1)` cells/mm$^3$**.
 
 I kept the variable coding from the data. Age includes negative values, so I report it on the supplied scale rather than assuming it is actual age in years. I treat `packs` as categories, with code 0 as the reference, and `drug` as binary. I use `partners` and `cesd` as numeric variables. Without the class codebook, I cannot give exact labels for the smoking categories or confirm whether the partners score is capped.
 
