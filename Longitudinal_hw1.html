@@ -130,16 +130,15 @@ window.Quarto = {
 </header>
 
 
-<p>I used the Six Cities data for Question 2 and the MACS data for Question 3.</p>
 <section id="question-1" class="level1">
 <h1>Question 1:</h1>
-<section id="aicross-sectional-design" class="level2">
-<h2 class="anchored" data-anchor-id="aicross-sectional-design">(a)(i)Cross-sectional design</h2>
+<section id="a" class="level2">
+<h2 class="anchored" data-anchor-id="a">(a)</h2>
+<p><strong>(i)Cross-sectional design</strong></p>
 <p><span class="math display">\[
 \hat{\gamma}_a = \bar{Y}_1^A - \bar{Y}_1^B
 \]</span></p>
-<p>Since there are (K/2) participants in each treatment group,</p>
-<p><span class="math display">\[
+<p>Since there are K/2 participants in each treatment group, <span class="math display">\[
 \operatorname{Var}(\bar{Y}_1^A)
 = \frac{\sigma^2}{K/2}
 = \frac{2\sigma^2}{K},
@@ -160,42 +159,145 @@ window.Quarto = {
 &amp;= \boxed{\frac{4\sigma^2}{K}}.
 \end{aligned}
 \]</span></p>
-<p>Note that () does not appear because each participant is measured only once.</p>
-<p><strong>(ii) Comparison of changes from baseline.</strong> For each participant define <span class="math inline">\(D_k=Y_{k,\mathrm{follow\text{-}up}}-Y_{k,\mathrm{baseline}}\)</span>. Then</p>
-<p><span class="math display">\[
-\operatorname{Var}(D_k)=\sigma^2+\sigma^2-2\rho\sigma^2
-=2\sigma^2(1-\rho).
+<p><strong>(ii) Longitudinal comparison of change from baselin</strong> <span class="math display">\[
+\hat{\gamma}_b
+=
+(\bar{Y}_1^A-\bar{Y}_0^A)
+-
+(\bar{Y}_1^B-\bar{Y}_0^B)
 \]</span></p>
-<p>Since the estimator is <span class="math inline">\(\bar D_A-\bar D_B\)</span>,</p>
+<p>For one participant, the variance of the change from baseline is</p>
 <p><span class="math display">\[
-\operatorname{Var}(\widehat\gamma_b)
-=\frac{2\sigma^2(1-\rho)}{K/2}
-+\frac{2\sigma^2(1-\rho)}{K/2}
-=\boxed{\frac{8\sigma^2(1-\rho)}{K}}.
+\begin{aligned}
+\operatorname{Var}(Y_1-Y_0)
+&amp;=
+\operatorname{Var}(Y_1)
++
+\operatorname{Var}(Y_0)
+-
+2\operatorname{Cov}(Y_1,Y_0)\\
+&amp;=
+\sigma^2+\sigma^2-2\rho\sigma^2\\
+&amp;=
+2\sigma^2(1-\rho).
+\end{aligned}
 \]</span></p>
-<p><strong>(iii) Crossover design.</strong> Every participant receives both treatments. With <span class="math inline">\(D_k=Y^A_{k1}-Y^B_{k2}\)</span>, the estimator is <span class="math inline">\(K^{-1}\sum_k D_k\)</span>. Thus</p>
+<p>Each treatment group has K/2 participants, so</p>
 <p><span class="math display">\[
-\operatorname{Var}(\widehat\gamma_c)
-=\frac{1}{K^2}\sum_{k=1}^K 2\sigma^2(1-\rho)
-=\boxed{\frac{2\sigma^2(1-\rho)}{K}}.
+\operatorname{Var}(\bar{Y}_1^A-\bar{Y}_0^A)
+=
+\frac{2\sigma^2(1-\rho)}{K/2}
+=
+\frac{4\sigma^2(1-\rho)}{K}.
 \]</span></p>
-<p><strong>(iv) Comparison of participant averages.</strong> For each participant, <span class="math inline">\(M_k=(Y_{k1}+Y_{k2})/2\)</span>, giving</p>
+<p>The two treatment groups are independent, so</p>
 <p><span class="math display">\[
-\operatorname{Var}(M_k)
-=\tfrac14\{\sigma^2+\sigma^2+2\rho\sigma^2\}
-=\frac{\sigma^2(1+\rho)}{2}.
+\begin{aligned}
+\operatorname{Var}(\hat{\gamma}_b)
+&amp;=
+\frac{4\sigma^2(1-\rho)}{K}
++
+\frac{4\sigma^2(1-\rho)}{K}\\
+&amp;=
+\boxed{\frac{8\sigma^2(1-\rho)}{K}}.
+\end{aligned}
 \]</span></p>
-<p>The difference between the two independent group means of <span class="math inline">\(M_k\)</span> has variance</p>
+<p><strong>(iii) Crossover design.</strong> <span class="math display">\[
+\hat{\gamma}_c
+=
+\bar{Y}_1^A-\bar{Y}_2^B
+\]</span></p>
+<p>Since the same K participants are measured under both treatments,</p>
 <p><span class="math display">\[
-\operatorname{Var}(\widehat\gamma_d)
-=2\frac{\sigma^2(1+\rho)/2}{K/2}
-=\boxed{\frac{2\sigma^2(1+\rho)}{K}}.
+\begin{aligned}
+\operatorname{Var}(Y_1^A-Y_2^B)
+&amp;=
+\operatorname{Var}(Y_1^A)
++
+\operatorname{Var}(Y_2^B)
+-
+2\operatorname{Cov}(Y_1^A,Y_2^B)\\
+&amp;=
+\sigma^2+\sigma^2-2\rho\sigma^2\\
+&amp;=
+2\sigma^2(1-\rho).
+\end{aligned}
 \]</span></p>
-<p>Positive within-person correlation reduces the variance of a <strong>difference</strong>, but increases the variance of an <strong>average</strong> relative to averaging independent measurements.</p>
+<p>Since there are K participants,</p>
+<p><span class="math display">\[
+\boxed{
+\operatorname{Var}(\hat{\gamma}_c)
+=
+\frac{2\sigma^2(1-\rho)}{K}
+}.
+\]</span></p>
+<p><strong>(iv) Longitudinal comparison of averages.</strong> <span class="math display">\[
+\hat{\gamma}_d
+=
+\bar{Y}^A-\bar{Y}^B,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\bar{Y}^{tx}
+=
+\frac{Y_1^{tx}+Y_2^{tx}}{2}.
+\]</span></p>
+<p>For one participant,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{Var}\left(\frac{Y_1+Y_2}{2}\right)
+&amp;=
+\frac{1}{4}
+\left[
+\operatorname{Var}(Y_1)
++
+\operatorname{Var}(Y_2)
++
+2\operatorname{Cov}(Y_1,Y_2)
+\right]\\
+&amp;=
+\frac{1}{4}
+\left[
+\sigma^2+\sigma^2+2\rho\sigma^2
+\right]\\
+&amp;=
+\frac{\sigma^2(1+\rho)}{2}.
+\end{aligned}
+\]</span></p>
+<p>Each treatment group has K/2 participants, so</p>
+<p><span class="math display">\[
+\operatorname{Var}(\bar{Y}^A)
+=
+\frac{\sigma^2(1+\rho)/2}{K/2}
+=
+\frac{\sigma^2(1+\rho)}{K}.
+\]</span></p>
+<p>Similarly,</p>
+<p><span class="math display">\[
+\operatorname{Var}(\bar{Y}^B)
+=
+\frac{\sigma^2(1+\rho)}{K}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{Var}(\hat{\gamma}_d)
+&amp;=
+\operatorname{Var}(\bar{Y}^A)
++
+\operatorname{Var}(\bar{Y}^B)\\
+&amp;=
+\frac{\sigma^2(1+\rho)}{K}
++
+\frac{\sigma^2(1+\rho)}{K}\\
+&amp;=
+\boxed{\frac{2\sigma^2(1+\rho)}{K}}.
+\end{aligned}
+\]</span></p>
 </section>
-<section id="b-measurement-cost-of-500-no-enrollment-cost" class="level2">
-<h2 class="anchored" data-anchor-id="b-measurement-cost-of-500-no-enrollment-cost">(b) Measurement cost of $500; no enrollment cost</h2>
-<p>There are <span class="math inline">\(300{,}000/500=600\)</span> available measurements. The cross-sectional design enrolls <strong>600 people (300 per treatment)</strong>. Each longitudinal design enrolls <strong>300 people</strong>: 150 per treatment in designs (ii) and (iv), or all 300 receiving both treatments in design (iii).</p>
+<section id="b" class="level2">
+<h2 class="anchored" data-anchor-id="b">(b)</h2>
+<p>There are 300000/500=600 available measurements. The cross-sectional design enrolls 600 people (300 per treatment). Each longitudinal design enrolls 300 people: 150 per treatment in designs (ii) and (iv), or all 300 receiving both treatments in design (iii).</p>
 <p>The table reports <span class="math inline">\(\operatorname{Var}(\widehat\gamma)/\sigma^2\)</span>; multiply each entry by <span class="math inline">\(\sigma^2\)</span> for the variance itself.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>variance_table <span class="ot">&lt;-</span> <span class="cf">function</span>(K_cross, K_long) {</span>
@@ -205,23 +307,28 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Cross-sectional</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">4</span> <span class="sc">/</span> K_cross, <span class="dv">3</span>),</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Change from baseline</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">8</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> rho) <span class="sc">/</span> K_long,</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Crossover =</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> rho) <span class="sc">/</span> K_long,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Average of two</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> rho) <span class="sc">/</span> K_long,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Comparison of average</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> rho) <span class="sc">/</span> K_long,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>var_b <span class="ot">&lt;-</span> <span class="fu">variance_table</span>(<span class="dv">600</span>, <span class="dv">300</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(var_b, <span class="at">digits =</span> <span class="dv">6</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"(b) Variance as a multiple of sigma-squared."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(var_b, <span class="at">digits =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>(b) Variance as a multiple of sigma-squared.</caption>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 13%">
+<col style="width: 30%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">rho</th>
 <th style="text-align: right;">Cross-sectional</th>
 <th style="text-align: right;">Change from baseline</th>
 <th style="text-align: right;">Crossover</th>
-<th style="text-align: right;">Average of two</th>
+<th style="text-align: right;">Comparison of average</th>
 </tr>
 </thead>
 <tbody>
@@ -250,25 +357,30 @@ window.Quarto = {
 </table>
 </div>
 </div>
-<p>At <span class="math inline">\(\rho=0.2\)</span>, <strong>crossover</strong> minimizes variance (0.005333<span class="math inline">\(\sigma^2\)</span>), followed by cross-sectional, averages, and changes. At <span class="math inline">\(\rho=0.5\)</span>, <strong>crossover</strong> again wins (0.003333<span class="math inline">\(\sigma^2\)</span>); cross-sectional is next, then averages, then changes. At <span class="math inline">\(\rho=0.8\)</span>, <strong>crossover</strong> wins (0.001333<span class="math inline">\(\sigma^2\)</span>), followed by changes, cross-sectional, and averages. Under this budget, change scores improve on the cross-sectional design only when <span class="math inline">\(\rho&gt;0.75\)</span>.</p>
+<p>At <span class="math inline">\(\rho=0.2\)</span>, crossover minimizes variance (0.005333<span class="math inline">\(\sigma^2\)</span>), followed by cross-sectional, averages, and changes. At <span class="math inline">\(\rho=0.5\)</span>, crossover again wins (0.003333<span class="math inline">\(\sigma^2\)</span>); cross-sectional is next, then averages, then changes. At <span class="math inline">\(\rho=0.8\)</span>, crossover wins (0.001333<span class="math inline">\(\sigma^2\)</span>), followed by changes, cross-sectional, and averages. Under this budget, change scores improve on the cross-sectional design only when <span class="math inline">\(\rho&gt;0.75\)</span>.</p>
 </section>
-<section id="c-enrollment-cost-of-250-plus-250-per-measurement" class="level2">
-<h2 class="anchored" data-anchor-id="c-enrollment-cost-of-250-plus-250-per-measurement">(c) Enrollment cost of $250 plus $250 per measurement</h2>
-<p>A cross-sectional participant costs <span class="math inline">\(250+250=500\)</span>, so <strong>600 people (300 per treatment)</strong> can be enrolled. A longitudinal participant costs <span class="math inline">\(250+2(250)=750\)</span>, so <strong>400 people</strong> can be enrolled: 200 per treatment in designs (ii) and (iv), or all 400 receiving both treatments in design (iii).</p>
+<section id="c" class="level2">
+<h2 class="anchored" data-anchor-id="c">(c)</h2>
+<p>A cross-sectional participant costs 250+250=500, so 600 people (300 each) can be enrolled. A longitudinal participant costs 250+2(250)=750, so 400 people can be enrolled: 200 per treatment in designs (ii) and (iv), or all 400 receiving both treatments in design (iii).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>var_c <span class="ot">&lt;-</span> <span class="fu">variance_table</span>(<span class="dv">600</span>, <span class="dv">400</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(var_c, <span class="at">digits =</span> <span class="dv">6</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"(c) Variance as a multiple of sigma-squared."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(var_c, <span class="at">digits =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>(c) Variance as a multiple of sigma-squared.</caption>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 13%">
+<col style="width: 30%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">rho</th>
 <th style="text-align: right;">Cross-sectional</th>
 <th style="text-align: right;">Change from baseline</th>
 <th style="text-align: right;">Crossover</th>
-<th style="text-align: right;">Average of two</th>
+<th style="text-align: right;">Comparison of average</th>
 </tr>
 </thead>
 <tbody>
@@ -301,15 +413,13 @@ window.Quarto = {
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">all</span>(var_b<span class="sc">$</span>Crossover <span class="sc">&lt;</span> var_b<span class="sc">$</span><span class="st">`</span><span class="at">Cross-sectional</span><span class="st">`</span>),</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">all</span>(var_c<span class="sc">$</span>Crossover <span class="sc">&lt;</span> var_c<span class="sc">$</span><span class="st">`</span><span class="at">Cross-sectional</span><span class="st">`</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>At <span class="math inline">\(\rho=0.2\)</span>, <strong>crossover</strong> minimizes variance (0.004000<span class="math inline">\(\sigma^2\)</span>), followed by averages, cross-sectional, and changes. At <span class="math inline">\(\rho=0.5\)</span>, <strong>crossover</strong> wins (0.002500<span class="math inline">\(\sigma^2\)</span>), followed by cross-sectional, averages, and changes. At <span class="math inline">\(\rho=0.8\)</span>, <strong>crossover</strong> wins (0.001000<span class="math inline">\(\sigma^2\)</span>), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when <span class="math inline">\(\rho&gt;2/3\)</span>; averages improve on it when <span class="math inline">\(\rho&lt;1/3\)</span>.</p>
-<p>I would choose the crossover design for all three correlations under either budget because it has the smallest variance. This assumes no carryover or period effects. Otherwise, receiving A first and B second could mix up the treatment effect with a time effect.</p>
-<p>If crossover is not possible, I would choose cross-sectional sampling at <span class="math inline">\(\rho=0.2,0.5\)</span> and changes at <span class="math inline">\(\rho=0.8\)</span> in (b). In (c), I would choose averages at <span class="math inline">\(\rho=0.2\)</span>, cross-sectional sampling at <span class="math inline">\(\rho=0.5\)</span>, and changes at <span class="math inline">\(\rho=0.8\)</span>.</p>
+<p>At <span class="math inline">\(\rho=0.2\)</span>, crossover minimizes variance (0.004000<span class="math inline">\(\sigma^2\)</span>), followed by averages, cross-sectional, and changes. At <span class="math inline">\(\rho=0.5\)</span>, crossover wins (0.002500<span class="math inline">\(\sigma^2\)</span>), followed by cross-sectional, averages, and changes. At <span class="math inline">\(\rho=0.8\)</span>, crossover wins (0.001000<span class="math inline">\(\sigma^2\)</span>), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when <span class="math inline">\(\rho&gt;2/3\)</span>; averages improve on it when <span class="math inline">\(\rho&lt;1/3\)</span>. Since the goal is to minimize variance, the crossover design would be chosen for all three values of <span class="math inline">\(\rho\)</span>.</p>
 </section>
 </section>
 <section id="question-2" class="level1">
 <h1>Question 2</h1>
-<section id="a-exploratory-data-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="a-exploratory-data-analysis">(a) Exploratory data analysis</h2>
+<section id="a-1" class="level2">
+<h2 class="anchored" data-anchor-id="a-1">(a)</h2>
 <p>First, I checked the number of girls, the number of visits, and missing values.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>topeka <span class="ot">&lt;-</span> topeka[<span class="fu">order</span>(topeka<span class="sc">$</span>id, topeka<span class="sc">$</span>age), ]</span>
@@ -388,7 +498,7 @@ duplicate_visits
   1.000   3.000   7.000   6.647  10.000  12.000 </code></pre>
 </div>
 </div>
-<p>There are <strong>300 girls and 1,994 observations</strong>. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. However, having no missing entries does not mean that every girl attended every planned visit. Since girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.</p>
+<p>There are 300 girls and 1,994 observations. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. Since the girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.</p>
 <p><strong>Mean structure</strong></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
@@ -427,7 +537,7 @@ duplicate_visits
 </div>
 <p>Most girls show increasing lung function, but their starting levels and patterns of growth differ. Some also have decreases between visits. This suggests allowing girls to have different starting levels and possibly different growth rates.</p>
 <p><strong>Outliers</strong></p>
-<p>I used a simple curved mean model to look for observations that are unusual for a girl’s age and height. This model is just an EDA tool.</p>
+<p>I used a simple curved mean model to look for observations that are unusual for a girl’s age and height.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mean_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(log.FEV1 <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> height, <span class="at">data =</span> topeka)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>topeka<span class="sc">$</span>residual <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mean_model)</span>
@@ -527,20 +637,19 @@ duplicate_visits
 </div>
 </div>
 </div>
-<p>The residual correlation for visits about one year apart is <strong>0.79</strong>. This shows that measurements from the same girl are positively related even after adjusting for age and height. I would account for within-girl correlation, for example with a random-intercept model, rather than treating all visits as independent. This is a descriptive correlation; the pairs themselves are not independent, and it does not tell us the correlation at every time gap.</p>
+<p>The residual correlation for visits about one year apart is 0.79. This shows that measurements from the same girl are positively related even after adjusting for age and height. I would account for within-girl correlation, for example with a random-intercept model, rather than treating all visits as independent. This is a descriptive correlation; the pairs themselves are not independent, and it does not tell us the correlation at every time gap.</p>
 </section>
-<section id="b-questions-we-could-study" class="level2">
-<h2 class="anchored" data-anchor-id="b-questions-we-could-study">(b) Questions we could study</h2>
+<section id="b-1" class="level2">
+<h2 class="anchored" data-anchor-id="b-1">(b)</h2>
 <ol type="1">
 <li>How does lung function change as girls get older, and when does growth slow down?</li>
 <li>Do girls differ in their starting lung function and rates of growth?</li>
 <li>Is an increase in a girl’s height associated with an increase in her lung function?</li>
 <li>Does a girl’s earlier lung function help predict her later lung function?</li>
 </ol>
-<p>This dataset only includes girls from Topeka and does not include pollution measurements. Therefore, it cannot directly answer questions about differences between cities, boys and girls, or pollution effects.</p>
 </section>
-<section id="c-what-if-there-were-only-baseline-measurements" class="level2">
-<h2 class="anchored" data-anchor-id="c-what-if-there-were-only-baseline-measurements">(c) What if there were only baseline measurements?</h2>
+<section id="c-1" class="level2">
+<h2 class="anchored" data-anchor-id="c-1">(c)</h2>
 <p>With one measurement per girl, we could compare FEV1 between girls of different ages or heights. However, an age difference between two girls is not necessarily the same as a change within one girl. Interpreting the cross-sectional age pattern as growth would require assuming that girls of different ages are otherwise comparable, including their birth cohorts and selection into the study. Baseline ages also cover less of adolescence than all follow-up visits.</p>
 <p>We could describe differences in lung function levels, but we could not estimate individual growth rates or their variation. We could study the association between height and FEV1 across girls, but not the association between changes in height and FEV1 within a girl. Finally, without later measurements, we could not estimate within-girl correlation or check how well baseline lung function predicts future lung function.</p>
 </section>
@@ -549,7 +658,6 @@ duplicate_visits
 <h1>Question 3</h1>
 <section id="a-baseline-table-1" class="level2">
 <h2 class="anchored" data-anchor-id="a-baseline-table-1">(a) Baseline Table 1</h2>
-<p>I kept participants with a measurement within six months before seroconversion and at least one measurement afterward. For baseline, I used the last pre-seroconversion visit and treated its time as zero. Follow-up visits keep their recorded time since seroconversion.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>macs <span class="ot">&lt;-</span> macs[<span class="fu">order</span>(macs<span class="sc">$</span>id, macs<span class="sc">$</span>time), ]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
@@ -701,14 +809,12 @@ duplicate_visits
 </table>
 </div>
 </div>
-<p>The final sample contains <strong>266 participants</strong>, with no missing baseline covariates. The mean baseline CD4 count is <strong>998.9 cells/mm<span class="math inline">\(^3\)</span></strong>.</p>
-<p>I kept the variable coding from the data. Age includes negative values, so I report it on the supplied scale rather than assuming it is actual age in years. I treat <code>packs</code> as categories, with code 0 as the reference, and <code>drug</code> as binary. I use <code>partners</code> and <code>cesd</code> as numeric variables. Without the class codebook, I cannot give exact labels for the smoking categories or confirm whether the partners score is capped.</p>
+<p>The final sample contains 266 participants, with no missing baseline covariates. The mean baseline CD4 count is 998.9 cells/mm<span class="math inline">\(^3\)</span>.</p>
 </section>
 <section id="b-two-stage-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="b-two-stage-analysis">(b) Two-stage analysis</h2>
 <p><strong>Stage 1</strong></p>
-<p>For each participant, I fit the model</p>
-<p><span class="math display">\[
+<p>For each participant, I fit the model <span class="math display">\[
 \text{CD4}_{ki}=a_k+b_k\text{time}_{ki}+e_{ki}.
 \]</span></p>
 <p>The intercept estimates the CD4 level at time zero, and the slope estimates the change per year. I chose a linear model because it is easy to interpret and some participants only have two measurements.</p>
@@ -759,7 +865,7 @@ duplicate_visits
 </table>
 </div>
 </div>
-<p>The mean slope is <strong>-293.4 cells/mm<span class="math inline">\(^3\)</span> per year</strong>, and the median is <strong>-141.7</strong>. Both suggest decreasing CD4 counts. The mean is more negative because some participants have very steep estimated declines.</p>
+<p>The mean slope is -293.4 cells/mm<span class="math inline">\(^3\)</span> per year, and the median is -141.7. Both suggest decreasing CD4 counts. The mean is more negative because some participants have very steep estimated declines.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8157</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>selected_ids <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">unique</span>(followup<span class="sc">$</span>id), <span class="dv">20</span>)</span>
@@ -1014,10 +1120,8 @@ duplicate_visits
 </table>
 </div>
 </div>
-<p>In the intercept model, smoking codes 3 and 4 and drug code 1 are associated with higher fitted CD4 levels than their reference groups, holding the other variables fixed (<span class="math inline">\(p&lt;0.05\)</span>). For example, the estimate for smoking code 3 is about <strong>319.7 cells/mm<span class="math inline">\(^3\)</span> higher</strong> than code 0. Age, partners, CES-D, and the other smoking categories do not have clear associations at the 0.05 level in this model.</p>
-<p>In the slope model, none of the individual baseline covariates has a <span class="math inline">\(p\)</span>-value below 0.05 using the usual least squares standard errors. The model explains only <strong>3.5%</strong> of the variation in slopes. Thus, these baseline variables do not explain much of the difference in estimated decline between participants. This does not prove that there are no associations.</p>
-<p><strong>A limitation of this analysis</strong></p>
-<p>The usual regression confidence intervals assume independent participants and equal error variance in stage 2. However, slopes based on short follow-up or few visits can be much less precise. There are <strong>35 participants with only two measurements</strong>, so I would treat these intervals and <span class="math inline">\(p\)</span>-values as approximate.</p>
+<p>In the intercept model, smoking codes 3 and 4 and drug code 1 are associated with higher fitted CD4 levels than their reference groups, holding the other variables fixed (p&lt;0.05). For example, the estimate for smoking code 3 is about 319.7 cells/mm<span class="math inline">\(^3\)</span> higher than code 0. Age, partners, CES-D, and the other smoking categories do not have clear associations at the 0.05 level in this model.</p>
+<p>In the slope model, none of the individual baseline covariates has a p-value below 0.05 using the usual least squares standard errors. The model explains only 3.5% of the variation in slopes. Thus, these baseline variables do not explain much of the difference in estimated decline between participants.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check how much short follow-up affects the average slope.</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>longer_followup <span class="ot">&lt;-</span> <span class="fu">subset</span>(results, visits <span class="sc">&gt;=</span> <span class="dv">3</span> <span class="sc">&amp;</span> last_time <span class="sc">&gt;=</span> <span class="dv">1</span>)</span>
@@ -1060,9 +1164,8 @@ duplicate_visits
 </table>
 </div>
 </div>
-<p>The average decline is smaller when restricted to participants with more follow-up, although the median still shows a decline. This suggests that the size of the mean slope is affected by short follow-up. I kept all 266 participants in the main analysis because excluding people also changes the sample.</p>
-<p><strong>Summary for a collaborator</strong></p>
-<p>CD4 counts generally decreased after seroconversion. About <strong>92.5%</strong> of participants had a downward fitted trend, and the median decline was about <strong>142 cells/mm<span class="math inline">\(^3\)</span> per year</strong>. Some baseline characteristics were related to CD4 levels near seroconversion, but they explained little of the variation in the rate of decline. The exact average rate should be interpreted carefully because participants with short follow-up had some extreme estimates. These are associations, not evidence that a baseline characteristic causes CD4 changes.</p>
+<p>The average decline was smaller among participants who had more follow-up, although the median still showed a decline. This suggests that participants with shorter follow-up may have had a strong influence on the average decline. We kept all 266 participants in the main analysis because excluding participants with shorter follow-up would also change the group being studied.</p>
+<p><strong>Summary for non-biostatisticians</strong> CD4 counts generally decreased after seroconversion. About r round(100 * mean(results<span class="math inline">\(slope &lt; 0), 1)% of participants showed a decrease over time, with a typical decline of about r round(-median(results\)</span>slope)) cells/mm<span class="math inline">\(^3\)</span> per year. Some characteristics measured at the start of the study were related to CD4 counts around the time of seroconversion, but they did not explain much of the difference in how quickly CD4 counts changed over time. The average rate of decline should be interpreted cautiously because participants with shorter follow-up periods sometimes had unusually large estimated changes. These findings show relationships between characteristics and CD4 counts; they do not show that any particular characteristic caused CD4 counts to change.</p>
 </section>
 </section>
 
