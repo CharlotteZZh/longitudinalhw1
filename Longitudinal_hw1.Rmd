@@ -3,6 +3,15 @@ title: "Longitudinal Data: Homework 1"
 output: pdf_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE,
+                      fig.width = 7, fig.height = 4, cache = FALSE)
+library(ggplot2)
+theme_set(theme_bw())
+load("Six Cities.RData")
+load("MACS.RData")
+```
+
 # Question 1: 
 
 ## (a)
@@ -242,11 +251,7 @@ stopifnot(600 * 500 == 300000, 300 * 2 * 500 == 300000,
           all(var_c$Crossover < var_c$`Cross-sectional`))
 ```
 
-At $\rho=0.2$, crossover minimizes variance (0.004000$\sigma^2$), followed by averages, cross-sectional, and changes. At $\rho=0.5$, crossover wins (0.002500$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.8$, crossover wins (0.001000$\sigma^2$), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when $\rho>2/3$; averages improve on it when $\rho<1/3$.
-
-I would choose the crossover design for all three correlations under either budget because it has the smallest variance. This assumes no carryover or period effects. Otherwise, receiving A first and B second could mix up the treatment effect with a time effect.
-
-If crossover is not possible, I would choose cross-sectional sampling at $\rho=0.2,0.5$ and changes at $\rho=0.8$ in (b). In (c), I would choose averages at $\rho=0.2$, cross-sectional sampling at $\rho=0.5$, and changes at $\rho=0.8$.
+At $\rho=0.2$, crossover minimizes variance (0.004000$\sigma^2$), followed by averages, cross-sectional, and changes. At $\rho=0.5$, crossover wins (0.002500$\sigma^2$), followed by cross-sectional, averages, and changes. At $\rho=0.8$, crossover wins (0.001000$\sigma^2$), followed by changes, cross-sectional, and averages. Changes improve on cross-sectional sampling when $\rho>2/3$; averages improve on it when $\rho<1/3$. Since the goal is to minimize variance, the crossover design would be chosen for all three values of $\rho$.
 
 
 # Question 2
@@ -276,7 +281,7 @@ knitr::kable(descriptive, digits = 2)
 summary(as.numeric(visits))
 ```
 
-There are 300 girls and 1,994 observations. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. However, having no missing entries does not mean that every girl attended every planned visit. Since girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.
+There are 300 girls and 1,994 observations. Each girl has between 1 and 12 visits, and 48 girls have only one visit. There are no missing values or duplicate ID-age pairs. Since the girls have different numbers of visits, I would use a method that allows unequal follow-up. Girls with one visit can help describe lung function levels, but not changes within a girl.
 
 **Mean structure**
 
@@ -306,7 +311,7 @@ Most girls show increasing lung function, but their starting levels and patterns
 
 **Outliers**
 
-I used a simple curved mean model to look for observations that are unusual for a girl's age and height. This model is just an EDA tool.
+I used a simple curved mean model to look for observations that are unusual for a girl's age and height. 
 
 ```{r topeka-outliers}
 mean_model <- lm(log.FEV1 ~ age + I(age^2) + height, data = topeka)
@@ -352,18 +357,16 @@ plot(previous[annual], current[annual], pch = 16, cex = .5,
 abline(lm(current[annual] ~ previous[annual]), col = "blue", lwd = 2)
 ```
 
-The residual correlation for visits about one year apart is **`r round(annual_cor, 2)`**. This shows that measurements from the same girl are positively related even after adjusting for age and height. I would account for within-girl correlation, for example with a random-intercept model, rather than treating all visits as independent. This is a descriptive correlation; the pairs themselves are not independent, and it does not tell us the correlation at every time gap.
+The residual correlation for visits about one year apart is `r round(annual_cor, 2)`. This shows that measurements from the same girl are positively related even after adjusting for age and height. I would account for within-girl correlation, for example with a random-intercept model, rather than treating all visits as independent. This is a descriptive correlation; the pairs themselves are not independent, and it does not tell us the correlation at every time gap.
 
-## (b) Questions we could study
+## (b) 
 
 1. How does lung function change as girls get older, and when does growth slow down?
 2. Do girls differ in their starting lung function and rates of growth?
 3. Is an increase in a girl's height associated with an increase in her lung function?
 4. Does a girl's earlier lung function help predict her later lung function?
 
-This dataset only includes girls from Topeka and does not include pollution measurements. Therefore, it cannot directly answer questions about differences between cities, boys and girls, or pollution effects.
-
-## (c) What if there were only baseline measurements?
+## (c) 
 
 With one measurement per girl, we could compare FEV1 between girls of different ages or heights. However, an age difference between two girls is not necessarily the same as a change within one girl. Interpreting the cross-sectional age pattern as growth would require assuming that girls of different ages are otherwise comparable, including their birth cohorts and selection into the study. Baseline ages also cover less of adolescence than all follow-up visits.
 
